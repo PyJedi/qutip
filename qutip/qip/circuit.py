@@ -111,6 +111,10 @@ class Gate(object):
             if arg_value is None:
                 raise ValueError("Gate %s requires an argument value" % name)
 
+        elif name in ["X", "Y", "Z", "S", "T"]:
+            if self.targets is None or len(self.targets) != 1:
+                raise ValueError("Gate %s requires one target" % name)
+
         self.arg_value = arg_value
         self.arg_label = arg_label
 
@@ -128,6 +132,11 @@ class Gate(object):
 
 
 _gate_name_to_label = {
+    'X': r'X',
+    'Y': r'Y',
+    'Z': r'Z',
+    'S': r'S',
+    'T': r'T',
     'RX': r'R_x',
     'RY': r'R_y',
     'RZ': r'R_z',
@@ -317,7 +326,7 @@ class QubitCircuit(object):
         else:
             if end is None:
                 end = self.N - 1
-            for i in range(start, end):
+            for i in range(start, end+1):
                 self.gates.append(Gate(name, targets=i, controls=None,
                                        arg_value=arg_value,
                                        arg_label=arg_label))
